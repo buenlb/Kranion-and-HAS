@@ -86,15 +86,12 @@ if pR.usePhaseCorrection == true || pR.usePhaseTimeRev == true
             return;
         else
             %load(pR.phaseFullFile);
-            %pR.AmpPh1 = Seg(pR.jXducerSection).AmpPh1;
-            pR.AmpPh1 = pR.Phases(pR.jXducerSection).AmpPh1;
         end
-        disp('Finished loading phase corrections.');
+        %disp('Finished loading phase corrections.');
     end
 end
-%pR.AmpPh1 = Seg(pR.jXducerSection).AmpPh1;
 pR.AmpPh1 = pR.Phases(pR.jXducerSection).AmpPh1;
-%Matt commented 10/13/2022 %Zach changed 9/1/2023
+if pR.wbr; disp('Finished loading phase corrections.'); end
 %%% INPUT VARIABLE UNIT CONVERSION %%%
 pR.h=pHAS.hmm/1000; % convert to m units.
 pR.v=pHAS.vmm/1000; 
@@ -150,24 +147,24 @@ pR.f=pERFA.fMHz*1e6;	% convert to Hz.
 % end
    
 % run the HAS calculations
-disp('Running simulation...');
+if pR.wbr; disp('Running simulation...'); end
 %usingGUI = false;
 %***********************************************************************
-%CalcHAS_ERFA8eFullnoGUI;         %THIS IS THE HAS KERNEL !!!
+%CalcHAS_ERFA8eFullnoGUI;         %THIS IS THE HAS KERNEL !!! 
+%DLP 1/31/22  set this 
+%back to use the correct radial distance "rave"
 [pout,Z,angpgvect,phasematsv,pR,pHAS] = CalcHAS_ERFA8eFullnoGUIfunc(Modl,pHAS,pR,pERFA);
 %***********************************************************************
 
-disp('Simulation complete');
+if pR.wbr; disp('Simulation complete'); end
 
+HAS_savefile = pR.HAS_savefile; % zach j addded
 if ~exist('HAS_savefile','var')
     HAS_savefile = 1;
 end
-if ~exist('usingGUI','var')
-    usingGUI = 0;
-end
 if HAS_savefile == 1
     % save outputs to .mat files
-    disp('Saving output files...');
-%     Savefiles7
-    disp('Saving output complete');
+    if pR.wbr; disp('Saving output files...'); end
+    %Savefiles7
+    if pR.wbr; disp('Saving output complete'); end
 end
